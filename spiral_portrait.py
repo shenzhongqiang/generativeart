@@ -17,7 +17,7 @@ def get_spiral_points(center, i):
     return result
 
 def draw_with_color():
-    im = cv2.imread("yuanyuan.jpg")
+    im = cv2.imread("images/yuanyuan.jpg")
     imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     shape = imgray.shape
     mask = np.ones(shape) * 255
