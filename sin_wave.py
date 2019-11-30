@@ -14,12 +14,12 @@ color = (223, 114, 238) #ee72df
 points = []
 for i in range(len(xs)):
     x = xs[i]
-    ys = range(ys_lower[i], ys_upper[i], 5)
+    ys = range(ys_lower[i], ys_upper[i], 3)
     for y in ys:
         points.append((x, y))
 
 points = np.array(points)
-size = int(0.5*len(points))
+size = int(0.6*len(points))
 points_ids = np.random.choice(len(points), size=size)
 for point in points[points_ids]:
     center = tuple(point)
