@@ -25,13 +25,14 @@ def point_in_contours(point, contours, hierarchy):
 
     return res
 
-width = 1000
-height = 500
+width = 2000
+height = 1200
 sizes = [1, 2, 2, 2, 3, 3, 3, 5]
 thicks = range(2, 6, 1)
-colors = [(255, 0, 0), (255, 0, 51), (0, 0, 0), (255, 0, 17), (255, 255, 255)]
+colors = [(255, 78, 78), (102,160,104), (102, 180, 104), (255, 78, 57), (255, 78, 19)]#, (255, 255, 255)]
 img = np.zeros((height, width, 3), np.uint8)
-cv2.putText(img, 'LOVE', (10,450), cv2.FONT_HERSHEY_SIMPLEX, 12, (255,255,255), 40, cv2.LINE_AA)
+cv2.putText(img, 'Merry', (380,450), cv2.FONT_HERSHEY_SIMPLEX, 15, (255,255,255), 40, cv2.LINE_AA)
+cv2.putText(img, 'Christmas', (80,850), cv2.FONT_HERSHEY_SIMPLEX, 12, (255,255,255), 40, cv2.LINE_AA)
 imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ret, thresh = cv2.threshold(imgray, 127, 255, 0)
 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)

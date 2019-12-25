@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
 
-B = 1.5
-RATIO = 3
+B = 3
+RATIO = 6
 
 def get_spiral_points(center, i):
     base_theta = np.pi/180 * i
@@ -45,7 +45,7 @@ def draw_with_color():
     cv2.destroyAllWindows()
 
 def draw_with_thickness():
-    im = cv2.imread("yuanyuan.jpg")
+    im = cv2.imread("images/yuanyuan.jpg")
     imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     shape = imgray.shape
     newshape = np.multiply(shape, RATIO)
@@ -73,9 +73,11 @@ def draw_with_thickness():
     for point in spiral_points:
         cord = (int(point[1]/RATIO), int(point[0]/RATIO))
         color = imgray[cord]
-        size = 4-np.argmax(samples>=color)
-        cv2.circle(res, point, radius=size, color=0, thickness=-1)
+        size = 8-2*np.argmax(samples>=color)
+        cv2.circle(res, point, radius=size, color=0, thickness=-1, lineType=cv2.LINE_AA)
 
+#    kernel = np.ones((2,2),np.float32)/4
+#    res = cv2.filter2D(res,-1,kernel)
     cv2.imwrite("output.jpg", res)
     cv2.imshow("output", res)
     cv2.waitKey(0)
