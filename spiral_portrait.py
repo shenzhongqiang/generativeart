@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import cv2
 
@@ -44,8 +45,8 @@ def draw_with_color():
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-def draw_with_thickness():
-    im = cv2.imread("images/yuanyuan.jpg")
+def draw_with_thickness(filepath):
+    im = cv2.imread(filepath)
     imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     shape = imgray.shape
     newshape = np.multiply(shape, RATIO)
@@ -86,4 +87,8 @@ def draw_with_thickness():
 
 
 if __name__ == "__main__":
-    draw_with_thickness()
+    if len(sys.argv) < 2:
+        print("Usage: %s <file>" % sys.argv[0])
+        sys.exit(1)
+    filepath = sys.argv[1]
+    draw_with_thickness(filepath)
