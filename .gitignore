@@ -49,3 +49,7 @@ data/finance
 data/tick/stock
 cnstock.db
 middleout
+
+*.png
+*.jpg
+*.jpeg
