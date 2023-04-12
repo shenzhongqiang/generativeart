@@ -1,57 +1,53 @@
+import sys
 import time
 import numpy as np
 import cv2 as cv
 
-class Circle(object):
-    def __init__(self, x, y, r):
-        self.x = x
-        self.y = y
-        self.r = r
-
-    def dist(self, c):
-        point1 = np.array((self.x, self.y))
-        point2 = np.array((c.x, c.y))
-        dist = np.linalg.norm(point1 - point2)
-        return dist
-
-    def overlap(self, c):
-        d = self.dist(c)
-        if d <= self.r + c.r + 1:
-            return True
-        return False
+def main(filename):
+    n = 6000
+    sizes = np.array([2,3,4,5,6])
+    p = np.flip(sizes)**2 * 1/np.sum(sizes**2)
 
 
-n = 5000
-sizes = [2,3,4,5,6]
-min_p = 1/sum(sizes)
-p = [i*min_p for i in reversed(sizes)]
+    img = cv.imread(filename)
+    (h, w, _) = img.shape
+    if w > 640:
+        factor = 640/w
+        img = cv.resize(img, (0,0), fx=factor, fy=factor)
+    (h, w, _) = img.shape
+    new_img = np.ones(img.shape) * 255
+    new_img = new_img.astype(np.uint8)
 
-img = cv.imread("/Users/shenzhongqiang/Desktop/test.png")
-(h, w, _) = img.shape
-new_img = np.ones(img.shape) * 255
-new_img = new_img.astype(np.uint8)
+    x_array = np.array([])
+    y_array = np.array([])
+    r_array = np.array([])
 
-circles = []
-start = time.time()
-while True:
-    x = np.random.randint(w)
-    y = np.random.randint(h)
-    r = np.random.choice(sizes, p=p)
-    cn = Circle(x, y, r)
-    overlap = False
-    for c in circles:
-        overlap = cn.overlap(c)
-        if overlap:
+    start = time.time()
+    while True:
+        x = np.random.randint(w)
+        y = np.random.randint(h)
+        r = np.random.choice(sizes, p=p)
+        dist = ((x-x_array)**2 + (y-y_array)**2)**0.5
+        overlap = np.any(dist-r-r_array<1)
+
+        if not overlap:
+            color = img[y, x].tolist()
+            cv.circle(new_img, (x, y), r, color, -1, cv.LINE_AA)
+            x_array = np.append(x_array, x)
+            y_array = np.append(y_array, y)
+            r_array = np.append(r_array, r)
+
+        if len(x_array) >= n:
             break
 
-    if not overlap:
-        color = img[y, x].tolist()
-        cv.circle(new_img, (x, y), r, color, -1, cv.LINE_AA)
-        circles.append(cn)
-    if len(circles) >= n:
-        break
+    end = time.time()
+    print("elapsed ", end-start)
+    cv.imwrite("output2.png", new_img)
 
-end = time.time()
-print("elapsed ", end-start)
-cv.imwrite("output.png", new_img)
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: %s <filename>", sys.argv[0])
+        sys.exit(1)
 
+    filename = sys.argv[1]
+    main(filename)
