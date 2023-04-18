@@ -3,6 +3,28 @@ import time
 import numpy as np
 import cv2 as cv
 
+class Counter(object):
+    def __init__(self):
+        self.loop_nums = []
+        self.circle_nums = []
+
+    def add(self, loop_num, circle_num):
+        print(loop_num, circle_num)
+        self.loop_nums.append(loop_num)
+        self.circle_nums.append(circle_num)
+
+    def is_end(self):
+        num = len(self.circle_nums)
+        circle_num = self.circle_nums[num-1]
+        for i in range(num-1, -1, -1):
+            if self.circle_nums[i] <= circle_num - 10:
+                break
+        if self.loop_nums[num-1] - self.loop_nums[i] > 1e4:
+            return True
+
+        return False
+
+
 def main(filename):
     n = 6000
     sizes = np.array([2,3,4,5,6])
@@ -23,6 +45,8 @@ def main(filename):
     r_array = np.array([])
 
     start = time.time()
+    i = 0
+    c = Counter()
     while True:
         x = np.random.randint(w)
         y = np.random.randint(h)
@@ -39,6 +63,11 @@ def main(filename):
 
         if len(x_array) >= n:
             break
+
+        c.add(i, len(x_array))
+        if c.is_end():
+            break
+        i += 1
 
     end = time.time()
     print("elapsed ", end-start)
